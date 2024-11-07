@@ -1,5 +1,8 @@
+########
+# BASE #
+########
 # pull official base image
-FROM python:3.13.0-alpine
+FROM python:3.13.0-alpine AS base
 
 # set work directory
 WORKDIR /usr/src/app
@@ -19,6 +22,29 @@ COPY ./requirements.txt .
 # install dependencies
 RUN pip install --upgrade pip \
      && pip install -r requirements.txt
+
+
+#######
+# DEV #
+#######
+FROM base AS dev
+
+# copy entrypoint.dev.sh
+COPY ./entrypoint.dev.sh .
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.dev.sh
+RUN chmod +x /usr/src/app/entrypoint.dev.sh
+
+# copy project
+COPY . .
+
+# run entrypoint.dev.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.dev.sh"]
+
+
+########
+# PROD #
+########
+FROM base AS prod
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
