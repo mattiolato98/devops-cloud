@@ -11,8 +11,7 @@ ENV PYTHONUNBUFFERED=1
 
 # install mysql dependencies
 RUN apk update \
-     && apk add gcc python3-dev musl-dev \ 
-     && apk add mysql mysql-client mariadb-connector-c-dev
+     && apk add --no-cache gcc musl-dev mariadb-connector-c-dev
 
 # copy requirements
 COPY ./requirements.txt .
