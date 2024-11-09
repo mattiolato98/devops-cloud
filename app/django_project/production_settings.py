@@ -11,3 +11,5 @@ DATABASES = {
         'PORT': os.environ.get('MYSQL_PORT'),
     }
 }
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
