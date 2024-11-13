@@ -11,7 +11,7 @@ jobs:
 
   build:
     name: Build Docker Images
-    runs-on: alpine-3.13.0
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
