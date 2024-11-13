@@ -38,20 +38,10 @@ jobs:
           echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - name: Pull images
+      - name: Build and push images
         run: |
-          docker pull ${{ env.WEB_IMAGE }} || true
-          docker pull ${{ env.NGINX_IMAGE }} || true
-          docker pull ${{ env.DB_IMAGE }} || true
-      - name: Build images
-        run: |
-          docker compose build
-      - name: Push images
-        run: |
-          docker push ${{ env.WEB_IMAGE }}
-          docker push ${{ env.NGINX_IMAGE }}
-          docker push ${{ env.DB_IMAGE }}
-          
+          docker compose build --pull 
+          docker compose push    
           
           
           
