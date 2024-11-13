@@ -18,10 +18,10 @@ jobs:
       - name: Add environment variables to .env
         run: |
           echo DEBUG=0 >> .env
-          echo DJANGO_SETTINGS_MODULE=django_project.production_settings
+          echo DJANGO_SETTINGS_MODULE=django_project.production_settings >> .env
           echo DATABASE=mysql >> .env
           echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
-          echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}
+          echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env
           echo MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} >> .env
           echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .env
           echo MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> .env
