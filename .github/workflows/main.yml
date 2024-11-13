@@ -1,0 +1,58 @@
+name: Continuous Integration and Delivery
+
+on: [push]
+
+env:
+  WEB_IMAGE: ghcr.io/${echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]'}/web
+  NGINX_IMAGE: ghcr.io/${echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]'}/nginx
+  DB_IMAGE: ghcr.io/${echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]'}/db
+
+jobs:
+
+  build:
+    name: Build Docker Images
+    runs-on: alpine-3.13.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Add environment variables to .env
+        run: |
+          echo DEBUG=0 >> .env
+          echo DJANGO_SETTINGS_MODULE=django_project.production_settings
+          echo DATABASE=mysql >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}
+          echo MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} >> .env
+          echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .env
+          echo MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> .env
+          echo MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }} >> .env
+          echo MYSQL_PORT=${{ secrets.MYSQL_PORT }} >> .env
+          echo MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} >> .env
+      - name: Set environment variables
+        run: |
+          echo "WEB_IMAGE=$(echo ${{ env.WEB_IMAGE }})" >> $GITHUB_ENV
+          echo "NGINX_IMAGE=$(echo ${{ env.NGINX_IMAGE }})" >> $GITHUB_ENV
+          echo "DB_IMAGE=$(echo ${{ env.DB_IMAGE }})" >> $GITHUB_ENV
+      - name: Log in to Github Packages
+        run: |
+          echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Pull images
+        run: |
+          docker pull ${{ env.WEB_IMAGE }} || true
+          docker pull ${{ env.NGINX_IMAGE }} || true
+          docker pull ${{ env.DB_IMAGE }} || true
+      - name: Build images
+        run: |
+          docker compose build
+      - name: Push images
+        run: |
+          docker push ${{ env.WEB_IMAGE }}
+          docker push ${{ env.NGINX_IMAGE }}
+          docker push ${{ env.DB_IMAGE }}
+          
+          
+          
+          
+          
