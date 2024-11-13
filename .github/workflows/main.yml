@@ -43,7 +43,9 @@ jobs:
       - name: Build and push images
         run: |
           docker compose build --pull 
-          docker compose push    
+          docker compose push
+        env:
+          NAMESPACE: ${{ secrets.NAMESPACE }}
           
           
           
