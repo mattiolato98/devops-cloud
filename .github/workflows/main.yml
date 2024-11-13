@@ -7,6 +7,8 @@ jobs:
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
+    env:
+      CI_IMAGE_TAG: development
     steps:
       - name: Checkout
         uses: actions/checkout@v1
