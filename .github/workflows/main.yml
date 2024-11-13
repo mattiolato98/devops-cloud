@@ -7,8 +7,6 @@ jobs:
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
-    env:
-      CI_IMAGE_TAG: development
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -43,5 +41,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Run Django tests
         run: |
+          docker compose pull 
+          docker compose run --rm ghcr.io/${{ secrets.NAMESPACE }}/$GITHUB_REPOSITORY/django-app:development
           python manage.py migrate
           python manage.py test accounts articles pages
