@@ -64,6 +64,6 @@ jobs:
       - name: Run Django tests
         run: |
           docker compose pull 
-          docker compose run --rm ghcr.io/${{ secrets.NAMESPACE }}/$GITHUB_REPOSITORY/django-app:development
+          docker compose run --rm django-app
           python manage.py migrate
           python manage.py test accounts articles pages
