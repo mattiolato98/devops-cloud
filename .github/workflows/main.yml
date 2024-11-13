@@ -2,11 +2,6 @@ name: Continuous Integration and Delivery
 
 on: [push]
 
-env:
-  WEB_IMAGE: ghcr.io/${echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]'}/django-app
-  NGINX_IMAGE: ghcr.io/${echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]'}/nginx
-  DB_IMAGE: ghcr.io/${echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]'}/db
-
 jobs:
 
   build:
@@ -30,11 +25,6 @@ jobs:
           echo "MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }}" >> .env
           echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
-#      - name: Set environment variables
-#        run: |
-#          echo "WEB_IMAGE=$(echo ${{ env.WEB_IMAGE }})" >> $GITHUB_ENV
-#          echo "NGINX_IMAGE=$(echo ${{ env.NGINX_IMAGE }})" >> $GITHUB_ENV
-#          echo "DB_IMAGE=$(echo ${{ env.DB_IMAGE }})" >> $GITHUB_ENV
       - name: Log in to Github Packages
         run: |
           echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
@@ -44,9 +34,3 @@ jobs:
         run: |
           docker compose build --pull 
           docker compose push
-        env:
-          NAMESPACE: ${{ secrets.NAMESPACE }}
-          
-          
-          
-          
