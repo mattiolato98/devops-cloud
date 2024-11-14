@@ -56,15 +56,10 @@ jobs:
           echo "MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }}" >> .env
           echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
-      - name: Log in to Github Packages
-        run: |
-          echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
-        env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Pull Docker images
         run: |
           docker compose pull
       - name: Run Django tests
         run: |
-          docker compose run --rm python manage.py test accounts articles pages
+          docker compose run --rm django-app python manage.py test accounts articles pages
           docker compose rm -f -s
