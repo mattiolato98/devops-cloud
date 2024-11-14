@@ -66,4 +66,5 @@ jobs:
           docker compose pull
       - name: Run Django tests
         run: |
-          docker compose run django-app python manage.py migrate && python manage.py test accounts articles pages
+          docker compose run --rm python manage.py test accounts articles pages
+          docker compose rm -f -s
