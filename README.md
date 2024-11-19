@@ -92,4 +92,6 @@ Make dev and prod settings identical, that is, making so both development and pr
 
 RIGHT enhancement:
 
+A
+
 Create an environment variable that if set change the settings file to production_settings.py, which contains settings to work with mysql server, else it will backups on a sqlite instance.
