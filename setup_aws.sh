@@ -11,15 +11,8 @@ chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 # Assign ec2-user to the group docker
 sudo usermod -a -G docker ec2-user
 
-# Install MySQL server
-sudo rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
-sudo wget https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
-sudo yum localinstall mysql57-community-release-el7-11.noarch.rpm 
-sudo yum install mysql-community-server
-sudo systemctl start mysqld.service
-
 # Generate SSH key
-ssh-keygen -t rsa
+ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
 chmod 600 ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
