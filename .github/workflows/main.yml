@@ -100,6 +100,8 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
       - name: Deploy images to AWS
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml ec2-user@${{ secrets.AWS_IP_ADDRESS }}:/home/ec2-user/app
           sh deploy.sh
