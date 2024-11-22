@@ -16,7 +16,7 @@ services:
       - db
   db:
     image: ghcr.io/${GITHUB_REPOSITORY}/db:${CI_IMAGE_TAG}
-    container_name: ${MYSQL_HOST}
+    container_name: ${MYSQL_HOSTNAME}
     build:
       context: ./db
       dockerfile: Dockerfile
