@@ -19,7 +19,9 @@ ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADD
   chmod 600 ~/.ssh/authorized_keys
   chmod 600 ~/.ssh/id_rsa
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-  private_key=cat ~/.ssh/id_rsa
 ENDSSH
 
-ssh-add - <<< private_key
+scp -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADDRESS:~/.ssh/id_rsa .
+
+ssh-add - <<< $(cat id_rsa)
+rm id_rsa
