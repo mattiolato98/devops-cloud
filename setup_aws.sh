@@ -1,6 +1,8 @@
 #! /bin/sh
 
-ssh -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADDRESS << 'ENDSSH'
+
+
+ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADDRESS << 'ENDSSH'
   # Install docker and docker compose v2
   sudo yum install docker -y
   sudo service docker start
