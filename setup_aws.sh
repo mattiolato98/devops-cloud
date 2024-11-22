@@ -23,5 +23,9 @@ ENDSSH
 
 scp -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADDRESS:~/.ssh/id_rsa .
 
-ssh-add - <<< $(cat id_rsa)
+private_key=$(cat id_rsa)
 rm id_rsa
+
+ssh-add - <<< $private_key
+gh secret set SSH_PRIVATE_KEY -b "$private_key"
+
