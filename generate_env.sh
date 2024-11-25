@@ -1,6 +1,6 @@
 #! /bin/sh
 
-echo "CI_REGISTRY=${{ secrets.CI_REGISTRY }}" >> .env
+echo CI_REGISTRY=${{ secrets.CI_REGISTRY }} >> .env
 echo "CI_REGISTRY_USER=${{ secrets.CI_REGISTRY_USER }}" >> .env
 echo "CI_REGISTRY_TOKEN=${{ secrets.CI_REGISTRY_TOKEN }}" >> .env
 echo "CI_IMAGE_TAG=development" >> .env
