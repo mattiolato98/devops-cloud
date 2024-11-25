@@ -102,6 +102,7 @@ jobs:
       - name: Deploy images to AWS
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          AWS_IP_ADDRESS: ${{ secrets.AWS_IP_ADDRESS }}
         run: |
-          scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml ec2-user@${{ secrets.AWS_IP_ADDRESS }}:/home/ec2-user/app
+          scp -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml ec2-user@${AWS_IP_ADDRESS}:/home/ec2-user/app
           sh deploy.sh
