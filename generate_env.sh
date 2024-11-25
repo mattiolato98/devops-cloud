@@ -1,10 +1,10 @@
 #! /bin/sh
 
-echo "CI_REGISTRY=${{ secrets.CI_REGISTRY }}"
-echo "CI_REGISTRY_USER=${{ secrets.CI_REGISTRY_USER }}"
-echo "CI_REGISTRY_TOKEN=${{ secrets.CI_REGISTRY_TOKEN }}"
-echo "CI_IMAGE_TAG=development"
-echo "GH_REPOSITORY=${{ secrets.GH_REPOSITORY }}"
+echo "CI_REGISTRY=${{ secrets.CI_REGISTRY }}" >> .env
+echo "CI_REGISTRY_USER=${{ secrets.CI_REGISTRY_USER }}" >> .env
+echo "CI_REGISTRY_TOKEN=${{ secrets.CI_REGISTRY_TOKEN }}" >> .env
+echo "CI_IMAGE_TAG=development" >> .env
+echo "GH_REPOSITORY=${{ secrets.GH_REPOSITORY }}" >> .env
 
 echo "DEBUG=0" >> .env
 echo "DJANGO_SETTINGS_MODULE=django_project.production_settings" >> .env
