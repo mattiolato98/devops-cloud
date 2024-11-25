@@ -19,6 +19,9 @@ ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$aws_ip_add
   chmod 600 ~/.ssh/authorized_keys
   chmod 600 ~/.ssh/id_rsa
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+  # Create app directory
+  mkdir ~/app
 ENDSSH
 
 scp -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$aws_ip_address:~/.ssh/id_rsa .
