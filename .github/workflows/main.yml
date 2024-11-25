@@ -16,23 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Add environment variables to .env
-        run: |
-          echo "DEBUG=0" >> .env
-          echo "DJANGO_SETTINGS_MODULE=django_project.production_settings" >> .env
-          echo "DATABASE=mysql" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
-          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
-          echo "MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }}" >> .env
-          echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env
-          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+        run: sh generate_env.sh
       - name: Log in to Github Packages
         run: |
-          echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+          echo ${CI_REGISTRY_TOKEN} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          CI_REGISTRY_TOKEN: ${{ secrets.CI_REGISTRY_TOKEN }}
       - name: Build and push images
         run: |
           docker compose build --pull 
@@ -47,23 +36,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Add environment variables to .env
-        run: |
-          echo "DEBUG=0" >> .env
-          echo "DJANGO_SETTINGS_MODULE=django_project.production_settings" >> .env
-          echo "DATABASE=mysql" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
-          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
-          echo "MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }}" >> .env
-          echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env
-          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+        run: sh generate_env.sh
       - name: Log in to Github Packages
         run: |
-          echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+          echo ${CI_REGISTRY_TOKEN} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          CI_REGISTRY_TOKEN: ${{ secrets.CI_REGISTRY_TOKEN }}
       - name: Pull Docker images
         run: |
           docker compose pull
@@ -75,22 +53,13 @@ jobs:
     name: Deploy to AWS
     runs-on: ubuntu-latest
     needs: [build, test]
+    env:
+      CI_IMAGE_TAG: development
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Add environment variables to .env
-        run: |
-          echo "DEBUG=0" >> .env
-          echo "DJANGO_SETTINGS_MODULE=django_project.production_settings" >> .env
-          echo "DATABASE=mysql" >> .env
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
-          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
-          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
-          echo "MYSQL_HOSTNAME=${{ secrets.MYSQL_HOSTNAME }}" >> .env
-          echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}" >> .env
-          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+        run: sh generate_env.sh
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock

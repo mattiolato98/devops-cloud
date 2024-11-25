@@ -1,6 +1,6 @@
 services:
   django-app:
-    image: ghcr.io/${GITHUB_REPOSITORY}/django-app:${CI_IMAGE_TAG}
+    image: ghcr.io/${GH_REPOSITORY}/django-app:${CI_IMAGE_TAG}
     build:
       context: ./app
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
     depends_on:
       - db
   db:
-    image: ghcr.io/${GITHUB_REPOSITORY}/db:${CI_IMAGE_TAG}
+    image: ghcr.io/${GH_REPOSITORY}/db:${CI_IMAGE_TAG}
     container_name: ${MYSQL_HOSTNAME}
     build:
       context: ./db
@@ -26,7 +26,7 @@ services:
     env_file:
       - ./.env
   nginx:
-    image: ghcr.io/${GITHUB_REPOSITORY}/nginx:${CI_IMAGE_TAG}
+    image: ghcr.io/${GH_REPOSITORY}/nginx:${CI_IMAGE_TAG}
     build:
       context: ./nginx
       dockerfile: Dockerfile
