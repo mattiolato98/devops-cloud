@@ -1,8 +1,8 @@
 #! /bin/sh
 
+read -p "Enter AWS public IP address: " aws_ip_address
 
-
-ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADDRESS << 'ENDSSH'
+ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$aws_ip_address << 'ENDSSH'
   # Install docker and docker compose v2
   sudo yum install docker -y
   sudo service docker start
@@ -21,11 +21,13 @@ ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADD
   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 ENDSSH
 
-scp -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$AWS_IP_ADDRESS:~/.ssh/id_rsa .
+scp -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$aws_ip_address:~/.ssh/id_rsa .
 
 private_key=$(cat id_rsa)
 rm id_rsa
 
 ssh-add - <<< $private_key
 gh secret set SSH_PRIVATE_KEY -b "$private_key"
+gh secret set DJANGO_ALLOWED_HOSTS -b "$aws_ip_address"
+gh secret set AWS_IP_ADDRESS -b "$aws_ip_address"
 
