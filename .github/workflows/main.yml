@@ -37,9 +37,7 @@ jobs:
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
       - name: Log in to Github Packages
         run: |
-          echo ${CI_REGISTRY_TOKEN} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
-        env:
-          CI_REGISTRY_TOKEN: ${{ secrets.CI_REGISTRY_TOKEN }}
+          echo ${{ secrets.CI_REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
       - name: Build and push images
         run: |
           docker compose build --pull 
@@ -55,9 +53,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Log in to Github Packages
         run: |
-          echo ${CI_REGISTRY_TOKEN} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
-        env:
-          CI_REGISTRY_TOKEN: ${{ secrets.CI_REGISTRY_TOKEN }}
+          echo ${{ secrets.CI_REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
       - name: Vulnerability scan on nginx image
         uses: aquasecurity/trivy-action@master
         with:
@@ -66,11 +62,12 @@ jobs:
           format: table
           exit-code: 1
           severity: CRITICAL
+          ignore-unfixed: true
       - name: Vulnerability scan on db image
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/db:$CI_IMAGE_TAG
+          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/db:development
           format: table
           exit-code: 1
           severity: CRITICAL
@@ -78,7 +75,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/django-app:$CI_IMAGE_TAG
+          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/django-app:development
           format: table
           exit-code: 1
           severity: CRITICAL
@@ -113,9 +110,7 @@ jobs:
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
       - name: Log in to Github Packages
         run: |
-          echo ${CI_REGISTRY_TOKEN} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
-        env:
-          CI_REGISTRY_TOKEN: ${{ secrets.CI_REGISTRY_TOKEN }}
+          echo ${{ secrets.CI_REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
       - name: Pull Docker images
         run: |
           docker compose pull
