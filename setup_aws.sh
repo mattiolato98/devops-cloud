@@ -2,6 +2,7 @@
 
 read -p "Enter AWS public IP address: " aws_ip_address
 
+chmod 400 ~/Downloads/labsuser.pem
 ssh -o StrictHostKeyChecking=no -i ~/Downloads/labsuser.pem ec2-user@$aws_ip_address << 'ENDSSH'
   # Install docker and docker compose v2
   sudo yum install docker -y
