@@ -45,6 +45,8 @@ jobs:
         with:
           scan-type: fs
           format: table
+          exit-code: 1
+          severity: CRITICAL
         env:
           TRIVY_IGNORE_UNFIXED: true
       - name: Build and push images
