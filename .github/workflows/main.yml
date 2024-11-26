@@ -6,10 +6,24 @@ on:
       - main
 
 jobs:
-
+  vulnerability-scan:
+    name: Run Dependency Vulnerability Scan on Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          format: table
+          exit-code: 1
+          severity: CRITICAL
+          ignore-unfixed: true
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
+    needs: vulnerability-scan
     env:
       CI_IMAGE_TAG: development
     steps:
@@ -42,36 +56,6 @@ jobs:
         run: |
           docker compose build --pull 
           docker compose push
-  vulnerability-scan:
-    name: Run Dependency Vulnerability Scan on Docker Images
-    runs-on: ubuntu-latest
-    env:
-      CI_IMAGE_TAG: development
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Log in to Github Packages
-        run: |
-          echo ${{ secrets.CI_REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
-      - name: Vulnerability scan on db image
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/db:development
-          format: table
-          exit-code: 1
-          severity: CRITICAL
-          ignore-unfixed: true
-      - name: Vulnerability scan on django-app image
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/django-app:development
-          format: table
-          exit-code: 1
-          severity: CRITICAL
-          ignore-unfixed: true
   test:
     name: Run Django Tests
     runs-on: ubuntu-latest
