@@ -62,7 +62,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/nginx:${CI_IMAGE_TAG}
+          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/nginx:$CI_IMAGE_TAG
           format: table
           exit-code: 1
           severity: CRITICAL
@@ -70,7 +70,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/db:${CI_IMAGE_TAG}
+          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/db:$CI_IMAGE_TAG
           format: table
           exit-code: 1
           severity: CRITICAL
@@ -78,7 +78,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/django-app:${CI_IMAGE_TAG}
+          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/django-app:$CI_IMAGE_TAG
           format: table
           exit-code: 1
           severity: CRITICAL
