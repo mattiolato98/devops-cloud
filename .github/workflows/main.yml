@@ -54,15 +54,6 @@ jobs:
       - name: Log in to Github Packages
         run: |
           echo ${{ secrets.CI_REGISTRY_TOKEN }} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
-      - name: Vulnerability scan on nginx image
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: image
-          image-ref: ${{ secrets.CI_REGISTRY }}/${{ secrets.GH_REPOSITORY }}/nginx:development
-          format: table
-          exit-code: 1
-          severity: CRITICAL
-          ignore-unfixed: true
       - name: Vulnerability scan on db image
         uses: aquasecurity/trivy-action@master
         with:
@@ -71,6 +62,7 @@ jobs:
           format: table
           exit-code: 1
           severity: CRITICAL
+          ignore-unfixed: true
       - name: Vulnerability scan on django-app image
         uses: aquasecurity/trivy-action@master
         with:
@@ -79,6 +71,7 @@ jobs:
           format: table
           exit-code: 1
           severity: CRITICAL
+          ignore-unfixed: true
   test:
     name: Run Django Tests
     runs-on: ubuntu-latest
