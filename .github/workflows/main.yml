@@ -81,6 +81,10 @@ jobs:
       - name: Pull Docker images
         run: |
           docker compose pull
+      - name: Check for missing migrations
+        run: |
+          docker compose run --rm django-app python manage.py makemigrations --check --dry-run
+          docker compose rm -f -s
       - name: Run Django tests
         run: |
           docker compose run --rm django-app python manage.py test accounts articles pages
