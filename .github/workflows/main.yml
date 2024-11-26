@@ -15,7 +15,7 @@ jobs:
       - name: Vulnerability scan
         run: |
           pip install safety
-          safety check --file=app/requirements.txt
+          safety scan --file=app/requirements.txt
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
