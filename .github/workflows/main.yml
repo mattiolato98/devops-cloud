@@ -7,19 +7,15 @@ on:
 
 jobs:
   vulnerability-scan:
-    name: Run Dependency Vulnerability Scan on Docker Images
+    name: Run Dependency Vulnerability Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Vulnerability scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: fs
-          format: table
-          exit-code: 1
-          severity: CRITICAL
-          ignore-unfixed: true
+        run: |
+          pip install safety
+          safety check --file=app/requirements.txt
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
