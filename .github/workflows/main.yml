@@ -40,6 +40,13 @@ jobs:
           echo ${CI_REGISTRY_TOKEN} | docker login ghcr.io -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
         env:
           CI_REGISTRY_TOKEN: ${{ secrets.CI_REGISTRY_TOKEN }}
+      - name: Run dependency vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          format: table
+        env:
+          TRIVY_IGNORE_UNFIXED: true
       - name: Build and push images
         run: |
           docker compose build --pull 
