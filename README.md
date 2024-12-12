@@ -91,5 +91,5 @@ WRONG enhancement:
 Make dev and prod settings identical, that is, making so both development and production use the same database. It is a part of the project design making so that developer does not need a mysql server running.
 
 RIGHT enhancement:
-
+ 
 Create an environment variable that if set change the settings file to production_settings.py, which contains settings to work with mysql server, else it will backups on a sqlite instance.
